@@ -8,5 +8,5 @@ Data Overage Charges are charges received if an account's users surpass the Data
 
 ## Data
 - Source: Excel spreadsheet compiled from two analyst's anonymized accounts over the span of nearly a year.
-- Schema: 
+- Schema: https://github.com/joshALancerGT/credit-priority-project-anon/blob/main/Credit%20Priority%20Schema.png
 
