@@ -6,7 +6,11 @@ Built SQL Server to classify data overage charges (invalid/valid/overcharged) fr
 ## Business Context
 Data Overage Charges are charges received if an account's users surpass the Data Allowance obtained by Account Analysts that are sent out via Bill Summary Invoices after an account's cycle. These are disputed whenever investigation reveal True Data Usage calculated (via Bill Summary) is lower than the Data Allowance, resulting in credit recovery process on INVALID/OVERCHARGED Bill Summaries. Prior to categorization, credit recovery process was initiated aimlessly whereas it is now systematically - focusing on INVALID charges as the highest priority. Contrary to management belief, VALID data charges are not the leading cause of high data charges resulting in the decrease of profit.
 
-## Data
+## Data / Material
 - Source: Excel spreadsheet compiled from two analyst's anonymized accounts over the span of nearly a year.
 - Schema: https://github.com/joshALancerGT/credit-priority-project-anon/blob/main/Credit%20Priority%20Schema.png
+- Scope: Project limited to two analyst accounts. Project built upon 1:1 relationship (Overage-to-Credit) instead of modeling multi-attempt credit negotiation system
+
+## Process / Phase
+### Phase 1 - Schema Design
 
