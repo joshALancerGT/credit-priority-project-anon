@@ -51,3 +51,26 @@ WITH (
 
 --	verifies CSV loaded into staging table successfully 
 --	SELECT * FROM StagingTable
+-- 	SELECT * FROM DataOverages
+-- 	SELECT * FROM Credits
+
+INSERT INTO DataOverages(OverageID,AccountNum,BillCycle,DataOverage,Allowance,BilledUsage,TrueUsage)
+SELECT
+	OverageID,
+	AccountNum,
+	BillCycle,
+	CAST(CAST(DataOverage AS MONEY) AS DECIMAL(10,2)),
+	Allowance,
+	BilledUsage,
+	TrueUsage
+FROM StagingTable
+
+INSERT INTO Credits(OverageID,StatusType,AskingCred,Category,NegotiatedCred,Notes)
+SELECT
+	OverageID,
+	StatusType,
+	CAST(CAST(AskingCred AS MONEY) AS DECIMAL(10,2)),
+	Category,
+	CAST(CAST(NegotiatedCred AS MONEY) AS DECIMAL(10,2)),
+	Notes
+FROM StagingTable
