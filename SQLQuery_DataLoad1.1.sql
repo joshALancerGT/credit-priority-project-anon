@@ -54,6 +54,7 @@ WITH (
 -- 	SELECT * FROM DataOverages
 -- 	SELECT * FROM Credits
 
+-- loads Staging Table data into Data Overages table, converts values to decimal
 INSERT INTO DataOverages(OverageID,AccountNum,BillCycle,DataOverage,Allowance,BilledUsage,TrueUsage)
 SELECT
 	OverageID,
@@ -65,6 +66,7 @@ SELECT
 	TrueUsage
 FROM StagingTable
 
+-- loads Staging Table data into Credits table, converts values to decimal
 INSERT INTO Credits(OverageID,StatusType,AskingCred,Category,NegotiatedCred,Notes)
 SELECT
 	OverageID,
