@@ -13,4 +13,6 @@ Data Overage Charges are charges received if an account's users surpass the Data
 
 ## Process / Phase
 ### Phase 1 - Schema Design
+Made decision to split spreadsheet into two tables instead of one due to the belief in showcasing some skills with JOINs amongst databases. Collapsing spreadsheet into a single table diminishes skill showcasing.
 
+### Phase 2 - Data Load
