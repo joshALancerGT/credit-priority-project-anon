@@ -1,6 +1,4 @@
-/*
-
-*/
+-- Create's table to be split after staging data from spreadsheet into Staging/Temp Table 
 CREATE TABLE DataOverages(
 	OverageID	INT PRIMARY KEY,
 	AccountNum	VARCHAR(50),
@@ -11,6 +9,7 @@ CREATE TABLE DataOverages(
 	TrueUsage	FLOAT
 );
 
+-- Create's table to be split after staging data from spreadsheet into Staging/Temp Table 
 CREATE TABLE Credits(
 	OverageID		INT PRIMARY KEY FOREIGN KEY REFERENCES DataOverages(OverageID),
 	StatusType		VARCHAR(50),
@@ -20,7 +19,8 @@ CREATE TABLE Credits(
 	Notes			VARCHAR(500)
 );
 
-DROP TABLE StagingTable
+-- used after sequence error discovered when importing raw data from spreadsheet to StagingTable
+-- DROP TABLE StagingTable 
 
 -- Staging Table (Temp Table)
 CREATE TABLE StagingTable(
@@ -38,7 +38,7 @@ CREATE TABLE StagingTable(
 	Notes			VARCHAR(500)
 );
 
-
+-- loads exported CSV into staging / place holder table
 BULK INSERT StagingTable
 FROM 'C:\Users\acost\OneDrive\Analyst Career\Data Analytics Project 1\DO_Credit_Project_redacted.csv'
 WITH (
@@ -49,4 +49,5 @@ WITH (
 	FIELDQUOTE = '"'
 )
 
-SELECT * FROM StagingTable
+--	verifies CSV loaded into staging table successfully 
+--	SELECT * FROM StagingTable
