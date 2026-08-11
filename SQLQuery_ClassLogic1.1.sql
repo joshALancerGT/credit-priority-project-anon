@@ -82,6 +82,8 @@ FROM StagingTable
 -- CLASSIFICATION LOGIC
 -- categorizes INVALID charges based on data allowance >= true usage
 -- temp usage, only validates INVALID charges
+
+/*
 SELECT 
 	do.AccountNum,
 	do.OverageID,
@@ -97,6 +99,7 @@ FROM DataOverages do
 JOIN Credits c
 	ON c.OverageID = do.OverageID
 ORDER BY Category DESC
+*/
 
 -- categorizes INVALID, OVERCHARGES, & VALID charges based on data allowance >= true usage
 SELECT
