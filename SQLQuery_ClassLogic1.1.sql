@@ -98,7 +98,7 @@ JOIN Credits c
 	ON c.OverageID = do.OverageID
 ORDER BY Category DESC
 
--- categorizes INVALID & OVERCHARGES charges based on data allowance >= true usage
+-- categorizes INVALID, OVERCHARGES, & VALID charges based on data allowance >= true usage
 SELECT
 	AccountNum,
 	OverageID,
@@ -107,9 +107,11 @@ SELECT
 	TrueUsage,
 	AskingCred,
 	NegotiatedCred,
-	CASE 
+	CASE -- key classification logic
 		WHEN Allowance >= TrueUsage AND TrueCharge = 0 THEN 'INVALID'
 		WHEN TrueGB < BilledGB AND TrueCharge > 0 THEN 'OVERCHARGED'
+		WHEN TrueGB >= BilledGB AND TrueCharge >= DataOverage THEN 'VALID' -- applied logic instead of utilizing ELSE to confirm correct logic
+		ELSE NULL -- serves as safety net in case any data was not classified successfully
 	END Category
 FROM(
 	SELECT 
@@ -123,16 +125,17 @@ FROM(
 		CASE
 			WHEN c.AskingCred = do.DataOverage THEN 0
 			ELSE CEILING(do.TrueUsage - do.Allowance)
-		END TrueGB,
+		END TrueGB, -- column created for key classification logic
 		CASE
 			WHEN c.AskingCred = do.DataOverage THEN 0
 			ELSE CEILING(do.TrueUsage - do.Allowance)*15
-		END TrueCharge,
+		END TrueCharge, -- column created for key classification logic
 		c.NegotiatedCred
 	FROM DataOverages do
 	JOIN Credits c
 		ON c.OverageID = do.OverageID
 	)SubQ
+ORDER BY Category
 
 
 -- TRACKING COUNT BETWEEN EACH CATEGORY
@@ -146,6 +149,8 @@ FROM(
 		CASE 
 			WHEN Allowance >= TrueUsage AND TrueCharge = 0 THEN 'INVALID'
 			WHEN TrueGB < BilledGB AND TrueCharge > 0 THEN 'OVERCHARGED'
+			WHEN TrueGB >= BilledGB AND TrueCharge >= DataOverage THEN 'VALID'
+			ELSE NULL
 		END Category
 	FROM(
 		SELECT 
@@ -174,3 +179,4 @@ GROUP BY Category
 
 -- TO DO'S
 -- create a new column after true charge displaying the amount of overage charge that was charged incorrectly
+-- step can be pushed to aggregation phase
