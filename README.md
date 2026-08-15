@@ -20,7 +20,7 @@ Staging table utilized in order to load Excel spreadsheet into MS SQL to then be
 
 ### Phase 3 - Category Classification Logic
 Categorizes data overage charges between VALID, INVALID, or OVERCHARGE based on determining factors pulled from various columns.
-####Field Definition(s):
+#### Field Definition(s):
 Allowance - data allowance during the cycle
 TrueUsage - actual usage analyst(s) manually calculate to reveal difference between total usage calculated by carrier (BilledUsage) vs the actual total usage of all lines calculated utilizing via Invoice / Bill Summary
 TrueGB - TrueUsage - Allowance reveals usage (GB) that should have actually been billed
