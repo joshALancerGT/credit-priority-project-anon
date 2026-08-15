@@ -179,6 +179,53 @@ FROM(
 		)SubQ
 	)SubQ2
 GROUP BY Category
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- UPDATING Credits category column to make aggregation simpler
+UPDATE c
+SET c.Category = cc.Category
+FROM Credits c
+JOIN(
+	SELECT
+		AccountNum,
+		OverageID,
+		DataOverage,
+		Allowance,
+		TrueUsage,
+		AskingCred,
+		NegotiatedCred,
+		CASE -- key classification logic
+			WHEN Allowance >= TrueUsage AND TrueCharge = 0 THEN 'INVALID'
+			WHEN TrueGB < BilledGB AND TrueCharge > 0 THEN 'OVERCHARGE'
+			WHEN TrueGB >= BilledGB AND TrueCharge >= DataOverage THEN 'VALID'
+			ELSE NULL
+		END Category
+	FROM(
+		SELECT 
+			do.AccountNum,
+			do.OverageID,
+			do.DataOverage,
+			do.Allowance,
+			do.TrueUsage,
+			c.AskingCred,
+			CEILING(do.DataOverage/15) AS BilledGB,
+			CASE
+				WHEN do.TrueUsage <= do.Allowance THEN 0
+				ELSE CEILING(do.TrueUsage - do.Allowance)
+			END TrueGB, -- column created for key classification logic
+			CASE
+				WHEN do.TrueUsage <= do.Allowance THEN 0
+				ELSE CEILING(do.TrueUsage - do.Allowance)*15
+			END TrueCharge, -- column created for key classification logic
+			c.NegotiatedCred
+		FROM DataOverages do
+		JOIN Credits c
+			ON c.OverageID = do.OverageID
+		)SubQ
+	) cc 
+ON cc.OverageID = c.OverageID
+
+SELECT * FROM Credits -- checks to see if update was done successfully
 
 -- TO DO'S
 -- create a new column after true charge displaying the amount of overage charge that was charged incorrectly
